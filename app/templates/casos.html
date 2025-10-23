@@ -1,0 +1,103 @@
+<div style="background:#222;color:#fff;padding:10px;">DEBUG: este es el casos.html correcto</div>
+
+
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <title>Casos diagnosticados</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link href="{{ url_for('static', path='style.css') }}" rel="stylesheet">
+
+  <style>
+    :root { color-scheme: dark; }
+    body{ background:#121212; color:#e0e0e0; font-family: system-ui,Segoe UI,Roboto,Arial,sans-serif; margin:0;}
+    .wrap{ max-width:1100px; margin:0 auto; padding:24px; }
+    h1{ color:#bb86fc; margin:0 0 12px; }
+    .acciones{ display:flex; gap:10px; margin: 10px 0 18px; }
+    .btn{ display:inline-block; padding:8px 12px; border-radius:10px; text-decoration:none; border:1px solid #333; background:#1e1e1e; color:#e0e0e0; }
+    .btn:hover{ background:#272727; }
+    .btn-prim{ background:#bb86fc; color:#121212; border-color:#a175f2; }
+    .btn-prim:hover{ background:#a175f2; }
+
+    .filtro{ margin:12px 0 16px; }
+    .filtro input{ width:100%; max-width:380px; padding:8px 10px; background:#1e1e1e; border:1px solid #333; border-radius:10px; color:#e0e0e0; }
+
+    .card{ background:#1e1e1e; border:1px solid #333; border-radius:12px; padding:12px; }
+    table{ width:100%; border-collapse:collapse; }
+    th, td{ padding:10px 12px; border-bottom:1px solid #2a2a2a; vertical-align: top; }
+    th{ color:#bb86fc; text-align:left; font-weight:600; }
+    tr:hover td{ background:#1a1a1a; }
+    .muted{ color:#aaa; font-size: .9rem; }
+    .pill{ display:inline-block; margin:2px 4px 2px 0; padding:2px 8px; border-radius:999px; background:#2a2a2a; border:1px solid #333; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>📋 Casos diagnosticados</h1>
+
+    <div class="acciones">
+      <a class="btn" href="/panel">🏠 Volver al panel</a>
+      <a class="btn" href="/">➕ Nuevo diagnóstico</a>
+      <a class="btn btn-prim" href="/stats">📊 Ver estadísticas</a>
+    </div>
+
+    <div class="filtro">
+      <input id="q" type="search" placeholder="Filtrar por tipo, síntoma, categoría o criticidad…">
+    </div>
+
+    <div class="card">
+      {% if not casos %}
+        <p class="muted">Todavía no hay casos guardados.</p>
+      {% else %}
+      <table id="tabla">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Tipo</th>
+            <th>Síntomas</th>
+            <th>Categoría</th>
+            <th>Criticidad</th>
+            <th class="muted">Nombre</th>
+            <th class="muted">Fecha</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for c in casos %}
+          <tr>
+            <td>{{ c.n }}</td>
+            <td>{{ c.tipo_dispositivo }}</td>
+            <td>
+              {% for s in c.sintomas %}
+                <span class="pill">{{ s }}</span>
+              {% endfor %}
+            </td>
+            <td>{{ c.categoria_top }}</td>
+            <td>{{ c.criticidad }}</td>
+            <td class="muted">{{ c.nombre }}</td>
+            <td class="muted">{{ c.fecha }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% endif %}
+    </div>
+  </div>
+
+  <script>
+    // filtro simple por texto
+    const q = document.getElementById('q');
+    const tbl = document.getElementById('tabla');
+    if (q && tbl) {
+      q.addEventListener('input', () => {
+        const term = q.value.trim().toLowerCase();
+        for (const row of tbl.tBodies[0].rows) {
+          const txt = row.innerText.toLowerCase();
+          row.style.display = txt.includes(term) ? '' : 'none';
+        }
+      });
+    }
+  </script>
+</body>
+</html>

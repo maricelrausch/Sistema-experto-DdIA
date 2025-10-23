@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Diagnóstico de Dispositivos</title>
+    <!-- sin barra inicial -->
+    <link rel="stylesheet" href="{{ url_for('static', path='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Sistema Experto para Fallas de Dispositivos IoT</h1>
+        <p>Ingrese los hechos observados para obtener un diagnóstico.</p>
+
+        <!-- si tenés el endpoint HTML /resultado, dejalo así; si no, cambiá a /diagnosticar -->
+        <form action="/resultado" method="post">
+            <fieldset>
+                <legend>1. Información del Dispositivo</legend>
+                <label for="nombre">Nombre o Identificador:</label>
+                <input type="text" id="nombre" name="nombre" placeholder="Ej: Cámara del Patio" required>
+
+                <label for="tipo">Tipo de Dispositivo:</label>
+                <select id="tipo" name="tipo" required>
+                    <option value="" disabled selected>-- Seleccione un tipo --</option>
+                    {% for dispositivo in dispositivos %}
+                        <!-- Para Enum: .value (string) para el value y .name para el label -->
+                        <option value="{{ dispositivo.value }}">{{ dispositivo.name.replace('_', ' ')|title }}</option>
+                    {% endfor %}
+                </select>
+            </fieldset>
+
+            <fieldset>
+                <legend>2. Hechos Observados (Síntomas)</legend>
+                <div class="sintomas-grid">
+                    {% for sintoma in sintomas %}
+                    <div class="checkbox-container">
+                        <!-- name="sintomas" para enviar lista; usar .value/.name en Enums -->
+                        <input type="checkbox" id="s_{{ sintoma.value }}" name="sintomas" value="{{ sintoma.value }}">
+                        <label for="s_{{ sintoma.value }}">{{ sintoma.name.replace('_', ' ')|title }}</label>
+                    </div>
+                    {% endfor %}
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <legend>3. Datos Adicionales (Opcional)</legend>
+                <label for="intensidad_wifi">Intensidad Señal WiFi (RSSI en dBm):</label>
+                <input type="number" id="intensidad_wifi" name="intensidad_wifi" min="-100" max="0" placeholder="Ej: -75">
+
+                <label for="tiempo_encendido">Días encendido sin reiniciar:</label>
+                <input type="number" id="tiempo_encendido" name="tiempo_encendido" min="0" placeholder="Ej: 30">
+            </fieldset>
+
+            <button type="submit">Diagnosticar Falla</button>
+        </form>
+    </div>
+</body>
+</html>

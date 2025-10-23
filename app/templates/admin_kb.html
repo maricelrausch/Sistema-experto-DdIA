@@ -1,0 +1,72 @@
+﻿<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <title>Administrador de Base de Conocimiento</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <h1>Cargar nuevo síntoma o dispositivo</h1>
+
+  <!-- FORMULARIO para agregar síntoma -->
+  <section>
+    <h2>Nuevo síntoma</h2>
+    <form method="post" action="/admin/sintoma/nuevo">
+      <label>Código del síntoma:
+        <input name="codigo" required>
+      </label><br>
+      <label>Causa:
+        <input name="causa" required>
+      </label><br>
+      <label>Categoría:
+        <select name="categoria">
+          <option value="hardware">Hardware</option>
+          <option value="software">Software</option>
+          <option value="red">Red</option>
+          <option value="configuracion">Configuración</option>
+          <option value="energia">Energía</option>
+        </select>
+      </label><br>
+      <label>Probabilidad base (%):
+        <input type="number" name="prob" min="0" max="100" step="1" required>
+      </label><br>
+      <label>Solución recomendada:
+        <input name="solucion" required>
+      </label><br>
+      <button type="submit">Guardar síntoma</button>
+    </form>
+  </section>
+
+  <hr>
+
+  <!-- FORMULARIO para agregar dispositivo -->
+  <section>
+    <h2>Nuevo dispositivo</h2>
+    <form method="post" action="/admin/dispositivo/nuevo">
+      <label>Tipo de dispositivo:
+        <select name="tipo">
+          <option value="termostato">Termostato</option>
+          <option value="luz_inteligente">Luz Inteligente</option>
+          <option value="camara_seguridad">Cámara de Seguridad</option>
+          <option value="cerradura_inteligente">Cerradura Inteligente</option>
+          <option value="asistente_voz">Asistente de Voz</option>
+          <option value="sensor_agua">Sensor de Agua</option>
+        </select>
+      </label><br>
+      <label>Factor Hardware:
+        <input type="number" name="factor_hardware" step="0.1">
+      </label><br>
+      <label>Factor Red:
+        <input type="number" name="factor_red" step="0.1">
+      </label><br>
+      <label>Factor Energía:
+        <input type="number" name="factor_energia" step="0.1">
+      </label><br>
+      <label>Factor Software:
+        <input type="number" name="factor_software" step="0.1">
+      </label><br>
+      <button type="submit">Guardar dispositivo</button>
+    </form>
+  </section>
+</body>
+</html>

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Panel Principal</title>
+
+  <!-- Vincula el CSS global -->
+  <link href="{{ url_for('static', path='style.css') }}" rel="stylesheet" />
+
+  <style>
+    body {
+      background: #121212;
+      color: #e0e0e0;
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    .wrap {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 30px 20px;
+    }
+
+    h1 {
+      color: #bb86fc;
+      text-align: left;
+      font-size: 2rem;
+      margin-bottom: 0.4em;
+    }
+
+    p.sub {
+      margin-bottom: 2em;
+      color: #aaa;
+    }
+
+    .panel-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background: #1e1e1e;
+      border: 1px solid #333;
+      border-radius: 14px;
+      padding: 20px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+    }
+
+    .card h3 {
+      color: #bb86fc;
+      font-size: 1.2rem;
+      margin-bottom: 0.5em;
+    }
+
+    .card p {
+      flex: 1;
+      font-size: 0.95rem;
+      color: #ccc;
+    }
+
+    .card a {
+      display: inline-block;
+      text-decoration: none;
+      color: #fff;
+      background: #bb86fc;
+      padding: 8px 14px;
+      border-radius: 10px;
+      font-weight: 600;
+      transition: background 0.2s ease;
+      text-align: center;
+      margin-top: 12px;
+    }
+
+    .card a:hover {
+      background: #a175f2;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <h1>Panel Principal</h1>
+    <p class="sub">Elegí una acción para continuar.</p>
+
+    <div class="panel-grid">
+      <div class="card">
+        <h3>🩺 Agregar diagnóstico</h3>
+        <p>Cargá un nuevo caso para obtener un diagnóstico del sistema experto.</p>
+        <a href="/">Ir al formulario</a>
+      </div>
+
+      <div class="card">
+        <h3>📊 Ver estadísticas</h3>
+        <p>Gráficos con dispositivos, síntomas, categorías y criticidad.</p>
+        <a href="/stats">Abrir estadísticas</a>
+      </div>
+
+      <div class="card">
+        <h3>📋 Tabla de diagnósticos</h3>
+        <p>Resumen detallado de cada caso procesado, con filtros simples.</p>
+        <a href="/casos/diagnosticados">Ver tabla</a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

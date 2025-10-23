@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <title>Estadísticas de fallas</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- CSS global -->
+  <link href="{{ url_for('static', path='style.css') }}" rel="stylesheet">
+
+  <!-- ⚠️ Forzado de modo oscuro (inline, prioridad máxima) -->
+  <style>
+    :root { color-scheme: dark; }
+    body { background:#121212 !important; color:#e0e0e0 !important; }
+    .wrap { max-width:1100px; margin:0 auto; }
+    .card { background:#1e1e1e !important; border:1px solid #333 !important; border-radius:12px; padding:16px; box-shadow:0 2px 10px rgba(0,0,0,.5) !important; }
+    .card h3 { color:#bb86fc !important; margin:0 0 10px !important; border:0 !important; }
+    h1 { color:#bb86fc !important; }
+    #err { margin:12px 0; padding:12px; border-radius:10px; background:#4d1d28; color:#ffd6db; border:1px solid #cf6679; display:none; }
+  </style>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div class="wrap">
+    <h1>📈 Estadísticas de fallas</h1>
+    <p>Total de casos: <b id="n_casos">—</b></p>
+
+    <div id="err"></div>
+
+    <div class="card"><h3>Top dispositivos</h3><canvas id="chartDevice"></canvas></div>
+    <div class="card"><h3>Top síntomas</h3><canvas id="chartSymptom"></canvas></div>
+    <div class="card"><h3>Categorías</h3><canvas id="chartCategory"></canvas></div>
+    <div class="card"><h3>Criticidad</h3><canvas id="chartCrit"></canvas></div>
+  </div>
+
+  <!-- Tema oscuro para Chart.js -->
+  <script>
+  if (window.Chart) {
+    Chart.defaults.color = '#e0e0e0';
+    Chart.defaults.borderColor = 'rgba(255,255,255,0.15)';
+    Chart.defaults.plugins.legend.labels.color = '#e0e0e0';
+    Chart.defaults.plugins.tooltip.titleColor = '#121212';
+    Chart.defaults.plugins.tooltip.bodyColor = '#121212';
+    Chart.defaults.plugins.tooltip.backgroundColor = '#e0e0e0';
+    Chart.defaults.scales.category.grid.color = 'rgba(255,255,255,0.12)';
+    Chart.defaults.scales.linear.grid.color = 'rgba(255,255,255,0.12)';
+  }
+  </script>
+
+ <script>
+async function loadStats(){
+  const showError = (msg) => {
+    const box = document.getElementById('err');
+    if (box) { box.textContent = msg || 'No se pudieron cargar las estadísticas.'; box.style.display = 'block'; }
+  };
+
+  try {
+    const res = await fetch("/api/stats", { headers: { "Accept": "application/json" } });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+
+    const n = (data && typeof data.n_casos === "number") ? data.n_casos : Number(data?.n_casos || 0);
+    document.getElementById("n_casos").textContent = n;
+
+    const devL = Object.keys(data.by_device || {}),     devV = Object.values(data.by_device || {});
+    const symL = Object.keys(data.by_symptom || {}),    symV = Object.values(data.by_symptom || {});
+    const catL = Object.keys(data.by_category || {}),   catV = Object.values(data.by_category || {});
+    const criL = Object.keys(data.by_criticidad || {}), criV = Object.values(data.by_criticidad || {});
+
+    // 🔸 Forzar a número (convierte "3" -> 3, null/undefined -> 0)
+    const toNums = (arr) => arr.map(v => (v == null ? 0 : Number(v)));
+
+    const bar = (id, L, V) => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      if (!L.length) { el.parentElement.style.display = "none"; return; }
+      new Chart(el, {
+        type: "bar",
+        data: {
+          labels: L,
+          datasets: [{
+            label: "Cantidad",
+            data: toNums(V),
+            backgroundColor: "rgba(187, 134, 252, 0.55)",  // lila semitransparente
+            borderColor: "#bb86fc",
+            borderWidth: 1.5
+          }]
+        },
+        options: {
+          plugins:{ legend:{ display:false } },
+          responsive:true,
+          scales:{
+            y:{ beginAtZero:true, ticks:{ precision:0 } },
+            x:{ ticks:{ maxRotation: 45, minRotation: 0 } }
+          }
+        }
+      });
+    };
+
+    const pie = (id, L, V) => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      if (!L.length) { el.parentElement.style.display = "none"; return; }
+      new Chart(el, {
+        type: "pie",
+        data: {
+          labels: L,
+          datasets: [{
+            data: toNums(V),
+            // paleta simple, visible en dark
+            backgroundColor: [
+              "rgba(187,134,252,0.75)",
+              "rgba(3,218,198,0.75)",
+              "rgba(255,112,67,0.75)",
+              "rgba(255,183,77,0.75)",
+              "rgba(129,212,250,0.75)"
+            ],
+            borderColor: "#1e1e1e",
+            borderWidth: 1
+          }]
+        },
+        options: { responsive:true }
+      });
+    };
+
+    bar("chartDevice", devL, devV);
+    bar("chartSymptom", symL, symV);
+    pie("chartCategory", catL, catV);
+    pie("chartCrit", criL, criV);
+
+  } catch (e) {
+    console.error(e);
+    showError("No se pudieron cargar los datos desde /api/stats.");
+    document.querySelectorAll('.card').forEach(c => c.style.display = 'none');
+    document.getElementById("n_casos").textContent = "0";
+  }
+}
+loadStats();
+</script>

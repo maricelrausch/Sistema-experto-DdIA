@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Resultado del Diagnóstico</title>
+    <!-- sin barra inicial -->
+    <link rel="stylesheet" href="{{ url_for('static', path='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Resultado del Diagnóstico</h1>
+
+        {% if resultado %}
+            <div class="resultado-header criticidad-{{ resultado.criticidad.value }}">
+                <h2>{{ resultado.dispositivo }} ({{ resultado.tipo.value.replace('_', ' ')|title }})</h2>
+                <p><strong>Nivel de Criticidad:</strong> {{ resultado.criticidad.value|title }}</p>
+            </div>
+
+            <div class="recomendacion-principal {% if resultado.requiere_alerta %}alerta-urgente{% endif %}">
+                <h3>⭐ Recomendación Principal</h3>
+                <p>{{ resultado.recomendacion_principal }}</p>
+            </div>
+
+            <h3>Posibles Causas (ordenadas por probabilidad)</h3>
+            <div class="diagnosticos-container">
+                {% for diag in resultado.diagnosticos %}
+                <div class="diagnostico-card">
+                    <h4>{{ diag.causa.value }} ({{ diag.probabilidad }}%)</h4>
+                    <p><strong>Categoría:</strong>
+                        <span class="categoria-{{ diag.categoria.value }}">{{ diag.categoria.value|title }}</span>
+                    </p>
+                    <p><strong>Solución Sugerida:</strong> {{ diag.solucion }}</p>
+                </div>
+                {% endfor %}
+            </div>
+
+        {% elif error %}
+            <div class="error-box">
+                <h2>Error al procesar el diagnóstico</h2>
+                <p>{{ error }}</p>
+            </div>
+        {% endif %}
+
+        <a href="/" class="boton-volver">Realizar otro diagnóstico</a>
+    </div>
+</body>
+</html>

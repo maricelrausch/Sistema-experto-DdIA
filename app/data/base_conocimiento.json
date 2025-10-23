@@ -1,0 +1,168 @@
+{
+  "reglas_por_sintoma": {
+    "no_responde": [
+      {
+        "causa": "FALTA DE ALIMENTACIÓN ELECTRICA O BATERIA AGOTADA",
+        "categoria": "energia",
+        "probabilidad_base": 85.0,
+        "solucion": "VERIFICAR CONEXIÓN A CORRIENTE, REVISAR FUSIBLES Y ESTADO DE LA BATERIA"
+      },
+      {
+        "causa": "FALLA CRÍTICA DE HARDWARE (CHIP PRINCIPAL DAÑADO)",
+        "categoria": "hardware",
+        "probabilidad_base": 70.0,
+        "solucion": "REVISAR LED DE ESTADO. SI NO HAY LUCES, CONSIDERAR REMPLAZO DEL DISPOSITIVO"
+      },
+      {
+        "causa": "FIRMWARE CORRUPTO O TIENE UN BOOTLOOP",
+        "categoria": "software",
+        "probabilidad_base": 60.0,
+        "solucion": "INTENTAR REINICIO FORZADO (10 seg). REINSTALAR FIRMWARE VIA MODO RECOVERY"
+      }
+    ],
+    "error_conexion": [
+      {
+        "causa": "SEÑAL WIFI DÉBIL O FUERA DE RANGO",
+        "categoria": "red",
+        "probabilidad_base": 80.0,
+        "solucion": "ACERCAR DISPOSITIVO AL ROUTER O INSTALAR UN REPETIDOR. VERIFICAR SI RSSI > -70dBm"
+      },
+      {
+        "causa": "CREDENCIALES WIFI INCONRRECTAS O CAMBIO DE RED",
+        "categoria": "configuracion",
+        "probabilidad_base": 75.0,
+        "solucion": "RECONFIGURAR CONEXIÓN WIFI DESDE APP MÓVIL"
+      },
+      {
+        "causa": "CONFLICTO DE IP O SATURACIÓN DEL ROUTER",
+        "categoria": "red",
+        "probabilidad_base": 65.0,
+        "solucion": "REINICIAR ROUTER, ASIGNAR IP ESTÁTICA"
+      },
+      {
+        "causa": "FIREWALL O RESTRICCIONES DE PUERTO BLOQUEANDO COMUNICACIÓN",
+        "categoria": "red",
+        "probabilidad_base": 55.0,
+        "solucion": "REVISAR REGLAS DE FIREWALL, ABRIR PUERTOS NECESARIOS"
+      }
+    ],
+    "reinicios_frecuentes": [
+      {
+        "causa": "Sobrecalentamiento por ventilación insuficiente",
+        "categoria": "hardware",
+        "probabilidad_base": 80.0,
+        "solucion": "Mejorar ventilación, limpiar polvo, alejar de fuentes de calor"
+      },
+      {
+        "causa": "Fuente de alimentación inestable (voltaje fluctuante)",
+        "categoria": "energia",
+        "probabilidad_base": 75.0,
+        "solucion": "Usar regulador de voltaje o UPS. Medir voltaje con multímetro (debe ser estable)"
+      },
+      {
+        "causa": "Bug en firmware causando crashes",
+        "categoria": "software",
+        "probabilidad_base": 70.0,
+        "solucion": "Actualizar a versión estable más reciente del firmware"
+      },
+      {
+        "causa": "Memoria RAM insuficiente o corrupta",
+        "categoria": "hardware",
+        "probabilidad_base": 60.0,
+        "solucion": "Reducir carga de trabajo, desactivar funciones no críticas, considerar upgrade"
+      }
+    ],
+    "consumo_anomalo": [
+      {
+        "causa": "Componente en cortocircuito o falla eléctrica interna",
+        "categoria": "hardware",
+        "probabilidad_base": 85.0,
+        "solucion": "PELIGRO: Desconectar inmediatamente. Inspección profesional necesaria"
+      },
+      {
+        "causa": "Proceso en bucle infinito consumiendo CPU",
+        "categoria": "software",
+        "probabilidad_base": 70.0,
+        "solucion": "Reiniciar dispositivo, actualizar firmware, revisar logs si están disponibles"
+      },
+      {
+        "causa": "Demasiados intentos de reconexión fallidos",
+        "categoria": "red",
+        "probabilidad_base": 65.0,
+        "solucion": "Solucionar primero problemas de conectividad (ver reglas ERROR_CONEXION)"
+      }
+    ],
+    "latencia_alta": [
+      {
+        "causa": "Congestión en red WiFi (muchos dispositivos conectados)",
+        "categoria": "red",
+        "probabilidad_base": 80.0,
+        "solucion": "Migrar a banda 5GHz si es compatible, actualizar router, usar QoS"
+      },
+      {
+        "causa": "Servidor cloud del fabricante con problemas",
+        "categoria": "red",
+        "probabilidad_base": 70.0,
+        "solucion": "Verificar estado del servicio en sitio del fabricante. Considerar control local"
+      },
+      {
+        "causa": "Dispositivo saturado procesando múltiples tareas",
+        "categoria": "software",
+        "probabilidad_base": 65.0,
+        "solucion": "Reducir frecuencia de polling, desactivar funciones no esenciales"
+      }
+    ],
+    "falla_autenticacion": [
+      {
+        "causa": "Token de acceso expirado o revocado",
+        "categoria": "configuracion",
+        "probabilidad_base": 85.0,
+        "solucion": "Volver a autorizar dispositivo desde aplicación móvil"
+      },
+      {
+        "causa": "Cambio de contraseña no actualizado en dispositivo",
+        "categoria": "configuracion",
+        "probabilidad_base": 80.0,
+        "solucion": "Reconfigurar credenciales. Verificar sincronización con servidor de autenticación"
+      },
+      {
+        "causa": "Certificados SSL/TLS vencidos",
+        "categoria": "software",
+        "probabilidad_base": 70.0,
+        "solucion": "Actualizar firmware con certificados nuevos. Sincronizar hora del sistema (NTP)"
+      },
+      {
+        "causa": "Reloj del sistema desincronizado (importante para OAuth)",
+        "categoria": "configuracion",
+        "probabilidad_base": 65.0,
+        "solucion": "Verificar servidor NTP configurado, reiniciar para forzar sincronización horaria"
+      }
+    ]
+  },
+  "reglas_por_dispositivo": {
+    "termostato": {
+      "sintomas_criticos": ["no_responde", "reinicios_frecuentes"],
+      "factor_hardware": 1.2
+    },
+    "camara_seguridad": {
+      "sintomas_criticos": ["no_responde", "error_conexion"],
+      "factor_red": 1.3
+    },
+    "cerradura_inteligente": {
+      "sintomas_criticos": ["no_responde", "falla_autenticacion", "consumo_anomalo"],
+      "factor_seguridad": 1.5
+    },
+    "sensor_agua": {
+      "sintomas_criticos": ["no_responde", "latencia_alta"],
+      "factor_urgencia": 1.4
+    },
+    "asistente_voz": {
+      "sintomas_criticos": ["falla_autenticacion", "latencia_alta"],
+      "factor_red": 1.2
+    },
+    "luz_inteligente": {
+      "sintomas_criticos": ["no_responde"],
+      "factor_hardware": 0.9
+    }
+  }
+}

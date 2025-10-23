@@ -358,6 +358,140 @@ def __routes():
 def api_listar_casos():
     return _read_json_safe(CASES_PATH, default=[])
 
+@app.get("/__casos_test", response_class=HTMLResponse)
+def __casos_test(request: Request):
+    fake = [{
+        "n": 1,
+        "tipo_dispositivo": "ROUTER",
+        "sintomas": ["ERROR_CONEXION","LATENCIA_ALTA"],
+        "categoria_top": "RED",
+        "criticidad": "MEDIA",
+        "nombre": "Demo",
+        "fecha": "2025-10-23 16:45"
+    }]
+    return TEMPLATES.TemplateResponse("casos.html", {"request": request, "casos": fake})
+
+@app.get("/form", response_class=HTMLResponse)
+def ver_formulario(request: Request):
+    dispositivos = list(TipoDispositivo)
+    sintomas = list(Sintoma)
+    return TEMPLATES.TemplateResponse(
+        "index.html",
+        {"request": request, "dispositivos": dispositivos, "sintomas": sintomas}
+    )
+
+
+@app.post("/resultado", response_class=HTMLResponse)
+def resultado_html(
+    request: Request,
+    nombre: str = Form(...),
+    tipo: str = Form(...),
+    sintomas: Optional[List[str]] = Form(None),
+    intensidad_wifi: Optional[str] = Form(None),
+    tiempo_encendido: Optional[str] = Form(None),
+):
+    # construir el dispositivo desde el form
+    dispositivo = DispositivoInput(
+        nombre=nombre,
+        tipo=TipoDispositivo(tipo),
+        sintomas=[Sintoma(s) for s in (sintomas or [])],
+    )
+
+    diagnosticos = base_conocimiento.obtener_diagnosticos(dispositivo)
+    if not diagnosticos:
+        return TEMPLATES.TemplateResponse(
+            "resultado.html",
+            {"request": request, "error": "No se encontraron diagnósticos para los síntomas ingresados."},
+            status_code=404,
+        )
+
+    criticidad = base_conocimiento.calcular_criticidad(dispositivo, diagnosticos)
+    requiere_alerta = (criticidad == NivelCriticidad.CRITICA)
+    diag_principal = diagnosticos[0]
+    recomendacion = f"[{diag_principal.categoria.value.upper()}] {diag_principal.solucion}"
+    if requiere_alerta:
+        recomendacion = f"⚠️ URGENTE: {recomendacion}"
+
+    # guardar caso para la tabla/estadísticas
+    try:
+        from datetime import datetime
+        _append_case({
+            "nombre": dispositivo.nombre,
+            "fecha": datetime.now().strftime("%Y-%m-%d %H:%M"),
+            "tipo_dispositivo": dispositivo.tipo.value,
+            "sintomas": [s.value for s in dispositivo.sintomas],
+            "categoria_top": diag_principal.categoria.value,
+            "criticidad": criticidad.value,
+        })
+    except Exception:
+        pass
+
+    resultado = Resultado(
+        dispositivo=dispositivo.nombre,
+        tipo=dispositivo.tipo,
+        criticidad=criticidad,
+        diagnosticos=diagnosticos[:5],
+        recomendacion_principal=recomendacion,
+        requiere_alerta=requiere_alerta,
+    )
+    return TEMPLATES.TemplateResponse("resultado.html", {"request": request, "resultado": resultado})
+from typing import Optional, List
+from fastapi import Form
+
+@app.post("/resultado", response_class=HTMLResponse)
+def resultado_html(
+    request: Request,
+    nombre: str = Form(...),
+    tipo: str = Form(...),
+    sintomas: Optional[List[str]] = Form(None),
+    intensidad_wifi: Optional[str] = Form(None),
+    tiempo_encendido: Optional[str] = Form(None),
+):
+    dispositivo = DispositivoInput(
+        nombre=nombre,
+        tipo=TipoDispositivo(tipo),
+        sintomas=[Sintoma(s) for s in (sintomas or [])],
+    )
+
+    diagnosticos = base_conocimiento.obtener_diagnosticos(dispositivo)
+    if not diagnosticos:
+        return TEMPLATES.TemplateResponse(
+            "resultado.html",
+            {"request": request, "error": "No se encontraron diagnósticos para los síntomas ingresados."},
+            status_code=404,
+        )
+
+    criticidad = base_conocimiento.calcular_criticidad(dispositivo, diagnosticos)
+    requiere_alerta = (criticidad == NivelCriticidad.CRITICA)
+    diag_principal = diagnosticos[0]
+    recomendacion = f"[{diag_principal.categoria.value.upper()}] {diag_principal.solucion}"
+    if requiere_alerta:
+        recomendacion = f"⚠️ URGENTE: {recomendacion}"
+
+    # guardar caso para tabla/estadísticas
+    try:
+        from datetime import datetime
+        _append_case({
+            "nombre": dispositivo.nombre,
+            "fecha": datetime.now().strftime("%Y-%m-%d %H:%M"),
+            "tipo_dispositivo": dispositivo.tipo.value,
+            "sintomas": [s.value for s in dispositivo.sintomas],
+            "categoria_top": diag_principal.categoria.value,
+            "criticidad": criticidad.value,
+        })
+    except Exception:
+        pass
+
+    resultado = Resultado(
+        dispositivo=dispositivo.nombre,
+        tipo=dispositivo.tipo,
+        criticidad=criticidad,
+        diagnosticos=diagnosticos[:5],
+        recomendacion_principal=recomendacion,
+        requiere_alerta=requiere_alerta,
+    )
+    return TEMPLATES.TemplateResponse("resultado.html", {"request": request, "resultado": resultado})
+
 # -------------------------------------------------------------------
 # Uvicorn (para ejecución directa) → usar app.main:app
 # -------------------------------------------------------------------

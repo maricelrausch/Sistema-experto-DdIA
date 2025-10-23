@@ -94,12 +94,16 @@
     <h1>Panel Principal</h1>
     <p class="sub">Elegí una acción para continuar.</p>
 
-    <div class="panel-grid">
-      <div class="card">
-        <h3>🩺 Agregar diagnóstico</h3>
-        <p>Cargá un nuevo caso para obtener un diagnóstico del sistema experto.</p>
-        <a href="/">Ir al formulario</a>
-      </div>
+        <div class="card" style="position:relative;">
+            <h3>🩺 Agregar diagnóstico</h3>
+            <p>Cargá un nuevo caso para obtener un diagnóstico del sistema experto.</p>
+
+            <!-- Botón real, SIN <button> alrededor -->
+            <a href="/form" class="btn btn-prim" style="display:inline-block; margin-top:12px;">
+                Ir al formulario
+            </a>
+        </div>
+
 
       <div class="card">
         <h3>📊 Ver estadísticas</h3>

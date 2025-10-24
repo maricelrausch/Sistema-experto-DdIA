@@ -16,6 +16,7 @@ from app.reglas import BaseConocimiento
 
 
 
+
 # -------------------------------------------------------------------
 # Paths (ajustados a la nueva estructura: app/static, app/templates, app/data)
 # -------------------------------------------------------------------
@@ -525,6 +526,29 @@ def delete_caso(idx: int):
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"No se pudo eliminar: {e}")
+    
+@app.get("/nuevo", response_class=HTMLResponse)
+def nuevo_diagnostico(request: Request):
+    """
+    Mostrar el formulario para cargar un nuevo diagnóstico.
+    """
+    try:
+        return TEMPLATES.TemplateResponse(
+            "index.html",
+            {
+                "request": request,
+                # pasamos las opciones del <select> y los checkboxes
+                "dispositivos": list(TipoDispositivo),
+                "sintomas": list(Sintoma),
+            },
+        )
+    except Exception as e:
+        # fallback de debug para que no veas solo 'Internal Server Error'
+        return HTMLResponse(
+            content=f"<pre>ERROR EN /nuevo:\n{e}</pre>",
+            status_code=500
+        )
+
 # -------------------------------------------------------------------
 # Uvicorn (para ejecución directa) → usar app.main:app
 # -------------------------------------------------------------------

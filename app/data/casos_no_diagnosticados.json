@@ -19,5 +19,85 @@
     ],
     "categoria_top": "hardware",
     "criticidad": "alta"
+  },
+  {
+    "nombre": "Luz habitacion",
+    "fecha": "2025-10-24 17:04",
+    "tipo_dispositivo": "luz_inteligente",
+    "sintomas": [
+      "no_responde"
+    ],
+    "categoria_top": "energia",
+    "criticidad": "alta"
+  },
+  {
+    "nombre": "luz cocina",
+    "fecha": "2025-10-24 17:04",
+    "tipo_dispositivo": "luz_inteligente",
+    "sintomas": [
+      "consumo_anomalo"
+    ],
+    "categoria_top": "hardware",
+    "criticidad": "baja"
+  },
+  {
+    "nombre": "Camara living",
+    "fecha": "2025-10-24 17:08",
+    "tipo_dispositivo": "camara_seguridad",
+    "sintomas": [
+      "error_conexion"
+    ],
+    "categoria_top": "red",
+    "criticidad": "critica"
+  },
+  {
+    "nombre": "Cocina",
+    "fecha": "2025-10-24 17:09",
+    "tipo_dispositivo": "asistente_voz",
+    "sintomas": [
+      "no_responde"
+    ],
+    "categoria_top": "energia",
+    "criticidad": "alta"
+  },
+  {
+    "nombre": "Rebalse ",
+    "fecha": "2025-10-24 17:18",
+    "tipo_dispositivo": "sensor_agua",
+    "sintomas": [
+      "reinicios_frecuentes"
+    ],
+    "categoria_top": "hardware",
+    "criticidad": "baja"
+  },
+  {
+    "nombre": "trabada",
+    "fecha": "2025-10-24 17:47",
+    "tipo_dispositivo": "cerradura_inteligente",
+    "sintomas": [
+      "no_responde"
+    ],
+    "categoria_top": "energia",
+    "criticidad": "critica"
+  },
+  {
+    "nombre": "llave de paso",
+    "fecha": "2025-10-24 17:47",
+    "tipo_dispositivo": "sensor_agua",
+    "sintomas": [
+      "error_conexion"
+    ],
+    "categoria_top": "red",
+    "criticidad": "baja"
+  },
+  {
+    "nombre": "llave de paso",
+    "fecha": "2025-10-24 17:49",
+    "tipo_dispositivo": "sensor_agua",
+    "sintomas": [
+      "error_conexion"
+    ],
+    "categoria_top": "red",
+    "criticidad": "baja"
   }
 ]

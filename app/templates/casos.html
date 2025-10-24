@@ -1,6 +1,3 @@
-<div style="background:#222;color:#fff;padding:10px;">DEBUG: este es el casos.html correcto</div>
-
-
 <!doctype html>
 <html lang="es">
 <head>
@@ -41,6 +38,7 @@
       <a class="btn" href="/panel">🏠 Volver al panel</a>
       <a class="btn" href="/">➕ Nuevo diagnóstico</a>
       <a class="btn btn-prim" href="/stats">📊 Ver estadísticas</a>
+      <a class="btn btn-sec" href="#" onclick="resetCasos()">🗑️ Limpiar casos</a>
     </div>
 
     <div class="filtro">
@@ -52,35 +50,42 @@
         <p class="muted">Todavía no hay casos guardados.</p>
       {% else %}
       <table id="tabla">
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Tipo</th>
-            <th>Síntomas</th>
-            <th>Categoría</th>
-            <th>Criticidad</th>
-            <th class="muted">Nombre</th>
-            <th class="muted">Fecha</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for c in casos %}
-          <tr>
-            <td>{{ c.n }}</td>
-            <td>{{ c.tipo_dispositivo }}</td>
-            <td>
-              {% for s in c.sintomas %}
-                <span class="pill">{{ s }}</span>
-              {% endfor %}
-            </td>
-            <td>{{ c.categoria_top }}</td>
-            <td>{{ c.criticidad }}</td>
-            <td class="muted">{{ c.nombre }}</td>
-            <td class="muted">{{ c.fecha }}</td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Tipo</th>
+      <th>Síntomas</th>
+      <th>Categoría</th>
+      <th>Criticidad</th>
+      <th>Nombre</th>
+      <th>Fecha</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+
+  <tbody>
+  {% for c in casos %}
+    <tr>
+      <td>{{ c.n }}</td>
+      <td>{{ c.tipo_dispositivo }}</td>
+      <td>
+        {% for s in c.sintomas %}
+          <span class="pill">{{ s }}</span>
+        {% endfor %}
+      </td>
+      <td>{{ c.categoria_top }}</td>
+      <td>{{ c.criticidad }}</td>
+      <td class="muted">{{ c.nombre }}</td>
+      <td class="muted">{{ c.fecha }}</td>
+      <td>
+        <button class="btn btn-sec btn-mini" onclick="borrarCaso({{ c.n }})">
+          🗑 
+        </button>
+      </td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
       {% endif %}
     </div>
   </div>
@@ -99,5 +104,35 @@
       });
     }
   </script>
+
+  <script>
+  
+  async function resetCasos() {
+  if (confirm("¿Seguro que querés eliminar todos los casos?")) {
+    const res = await fetch("/reset-casos", { method: "POST" });
+    if (res.ok) {
+      alert("✅ Casos eliminados correctamente");
+      location.reload(); // refresca la tabla
+    } else {
+      alert("⚠️ Error al eliminar los casos");
+    }
+  }
+}
+
+async function borrarCaso(n) {
+  if (confirm(`¿Querés eliminar el caso #${n}?`)) {
+    const res = await fetch(`/delete-caso/${n}`, { method: "POST" });
+    if (res.ok) {
+      alert("🗑 Caso eliminado");
+      location.reload();
+    } else {
+      alert("⚠️ No se pudo eliminar el caso");
+    }
+  }
+}
+
+</script>
+
+
 </body>
 </html>

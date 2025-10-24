@@ -1,112 +1,23 @@
 [
   {
-    "tipo_dispositivo": "termostato",
-    "sintomas": [
-      "no_responde"
-    ],
-    "categoria_top": "energia",
-    "criticidad": "alta"
-  },
-  {
-    "tipo_dispositivo": "termostato",
-    "sintomas": [
-      "no_responde"
-    ],
-    "categoria_top": "energia",
-    "criticidad": "alta"
-  },
-  {
-    "tipo_dispositivo": "termostato",
-    "sintomas": [
-      "no_responde"
-    ],
-    "categoria_top": "energia",
-    "criticidad": "alta"
-  },
-  {
+    "nombre": "camara comedor",
+    "fecha": "2025-10-24 16:44",
     "tipo_dispositivo": "camara_seguridad",
     "sintomas": [
-      "error_conexion",
-      "latencia_alta"
+      "error_conexion"
     ],
     "categoria_top": "red",
     "criticidad": "critica"
   },
   {
-    "tipo_dispositivo": "camara_seguridad",
+    "nombre": "Calefaccion",
+    "fecha": "2025-10-24 16:45",
+    "tipo_dispositivo": "termostato",
     "sintomas": [
-      "falla_autenticacion",
-      "no_responde"
-    ],
-    "categoria_top": "configuracion",
-    "criticidad": "critica"
-  },
-  {
-    "tipo_dispositivo": "luz_inteligente",
-    "sintomas": [
-      "no_responde",
+      "error_conexion",
       "consumo_anomalo"
     ],
-    "categoria_top": "energia",
+    "categoria_top": "hardware",
     "criticidad": "alta"
-  },
-  {
-    "tipo_dispositivo": "luz_inteligente",
-    "sintomas": [
-      "reinicios_frecuentes"
-    ],
-    "categoria_top": "energia",
-    "criticidad": "baja"
-  },
-  {
-    "tipo_dispositivo": "termostato",
-    "sintomas": [
-      "falla_autenticacion"
-    ],
-    "categoria_top": "configuracion",
-    "criticidad": "media"
-  },
-  {
-    "tipo_dispositivo": "termostato",
-    "sintomas": [
-      "error_conexion",
-      "no_responde"
-    ],
-    "categoria_top": "energia",
-    "criticidad": "alta"
-  },
-  {
-    "tipo_dispositivo": "cerradura_inteligente",
-    "sintomas": [
-      "error_conexion",
-      "reinicios_frecuentes"
-    ],
-    "categoria_top": "red",
-    "criticidad": "media"
-  },
-  {
-    "tipo_dispositivo": "cerradura_inteligente",
-    "sintomas": [
-      "latencia_alta"
-    ],
-    "categoria_top": "red",
-    "criticidad": "baja"
-  },
-  {
-    "tipo_dispositivo": "asistente_voz",
-    "sintomas": [
-      "latencia_alta"
-    ],
-    "categoria_top": "red",
-    "criticidad": "alta"
-  },
-  {
-    "tipo_dispositivo": "asistente_voz",
-    "sintomas": [
-      "error_conexion",
-      "reinicios_frecuentes"
-    ],
-    "categoria_top": "red",
-    "criticidad": "media"
   }
 ]

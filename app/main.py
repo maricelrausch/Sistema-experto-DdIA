@@ -492,6 +492,39 @@ def resultado_html(
     )
     return TEMPLATES.TemplateResponse("resultado.html", {"request": request, "resultado": resultado})
 
+#Borrar casos
+@app.post("/reset-casos")
+def reset_casos():
+    with open(CASES_PATH, "w", encoding="utf-8") as f:
+        f.write("[]")
+    return {"mensaje": "Casos eliminados correctamente"}
+
+@app.post("/delete-caso/{idx}")
+def delete_caso(idx: int):
+    """
+    Elimina el caso N (1-based) de la lista de casos diagnosticados.
+    """
+    try:
+        # 1. Leer lista actual
+        casos = _read_json_safe(CASES_PATH, default=[])
+
+        # Chequear que exista ese índice
+        # Ojo: en la tabla mostrás n = 1,2,3... pero las listas en Python empiezan en 0
+        real_index = idx - 1
+        if real_index < 0 or real_index >= len(casos):
+            raise HTTPException(status_code=404, detail="Caso no encontrado")
+
+        # 2. Eliminar ese caso
+        casos.pop(real_index)
+
+        # 3. Guardar la nueva lista limpia
+        with open(CASES_PATH, "w", encoding="utf-8") as f:
+            json.dump(casos, f, ensure_ascii=False, indent=2)
+
+        return {"ok": True, "msg": f"Caso {idx} eliminado"}
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"No se pudo eliminar: {e}")
 # -------------------------------------------------------------------
 # Uvicorn (para ejecución directa) → usar app.main:app
 # -------------------------------------------------------------------

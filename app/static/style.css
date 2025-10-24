@@ -84,3 +84,21 @@ canvas {
   border-radius: 8px;
   padding: 5px;
 }
+
+/* Asegura que los links sean clickeables */
+a { pointer-events: auto; }
+.card a { position: relative; z-index: 2; }
+
+/* Evita overlays invisibles tapando la tarjeta */
+.card::after { content: none; }
+
+.btn.btn-sec {
+  background: #4a0000 !important;
+  border: 1px solid #ff5555 !important;
+  color: #fff !important;
+}
+.btn.btn-sec:hover {
+  background: #700000 !important;
+  border-color: #ff8888 !important;
+}
+

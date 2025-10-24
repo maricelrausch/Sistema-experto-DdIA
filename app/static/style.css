@@ -3,7 +3,7 @@ body {
     background-color: #121212; color: #e0e0e0; line-height: 1.6; margin: 0; padding: 20px;
 }
 .container { max-width: 800px; margin: 0 auto; background-color: #1e1e1e; padding: 25px 40px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
-h1, h2, h3 { color: #bb86fc; border-bottom: 2px solid #333; padding-bottom: 10px; }
+h1, h2, h3 { color: #bb86fc; padding-bottom: 10px; }
 form { display: flex; flex-direction: column; gap: 25px; }
 fieldset { border: 1px solid #444; border-radius: 6px; padding: 20px; }
 legend { color: #03dac6; font-weight: bold; padding: 0 10px; }
@@ -178,4 +178,107 @@ a { pointer-events: auto; }
 }
 .btn-sec:hover {
   background: #3a3a3a;
+}
+
+/* 🔹 Contenedor principal de opciones (fila de 3) */
+.opciones {
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  gap: 30px;
+  flex-wrap: nowrap;       /* Mantiene una sola fila */
+  margin-top: 40px;
+  max-width: 1300px;       /* 🔸 Aumenta el ancho máximo */
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 20px;
+}
+
+/* 🔹 Cada tarjeta ocupa igual espacio dentro del contenedor */
+.opciones .card {
+  flex: 1;
+  min-width: 360px;        /* 🔸 Más ancha */
+  max-width: 400px;
+  background: #1e1e1e;
+  border: 1px solid #333;
+  border-radius: 14px;
+  padding: 24px 20px;
+  text-align: center;
+  box-shadow: 0 2px 10px rgba(0,0,0,.4);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.opciones .card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 16px rgba(187,134,252,.4);
+}
+
+/* 🔹 Títulos dentro de las tarjetas */
+.opciones .card h2 {
+  color: #bb86fc;
+  font-size: 1.3rem;
+  margin-bottom: 10px;
+}
+
+/* 🔹 Botones */
+.opciones .btn {
+  display: block;
+  width: 100%;
+  margin-top: 18px;
+  padding: 12px 0;
+  border-radius: 10px;
+  background: #bb86fc;
+  color: #121212;
+  text-decoration: none;
+  font-weight: 600;
+  border: none;
+  transition: background 0.25s ease;
+}
+
+.opciones .btn:hover {
+  background: #a175f2;
+}
+
+/* 🔹 Responsive (pantallas menores a 1200px bajan a 2 columnas) */
+@media (max-width: 1200px) {
+  .opciones {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}
+
+/* 🔹 Responsive (pantallas menores a 800px bajan a 1 columna) */
+@media (max-width: 800px) {
+  .opciones .card {
+    min-width: 300px;
+  }
+}
+
+/* 🔹 Ajuste del título principal para alinear con las tarjetas */
+h1 {
+  margin-left: calc((100% - 1300px) / 2 + 20px);
+  color: #bb86fc;
+  font-size: 2rem;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+/* 🔹 Línea decorativa debajo del título (tu hr existente) */
+h1 + hr {
+  margin-left: calc((100% - 1300px) / 2 + 20px);
+  width: 1300px;
+  border: none;
+  height: 1.5px;
+  background: #333;
+  margin-top: 0;
+  margin-bottom: 20px;
+}
+
+/* 🔹 Subtítulo debajo del título */
+.subtexto-panel {
+  margin-left: calc((100% - 1300px) / 2 + 20px);
+  color: #e0e0e0;
+  font-size: 1rem;
+  margin-bottom: 20px;
+  max-width: 1300px;
 }

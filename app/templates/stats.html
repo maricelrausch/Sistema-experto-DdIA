@@ -8,34 +8,134 @@
   <!-- CSS global -->
   <link href="{{ url_for('static', path='style.css') }}" rel="stylesheet">
 
-  <!-- ⚠️ Forzado de modo oscuro (inline, prioridad máxima) -->
+  <!-- 🎨 Forzado de modo oscuro + layout -->
   <style>
     :root { color-scheme: dark; }
-    body { background:#121212 !important; color:#e0e0e0 !important; }
-    .wrap { max-width:1100px; margin:0 auto; }
-    .card { background:#1e1e1e !important; border:1px solid #333 !important; border-radius:12px; padding:16px; box-shadow:0 2px 10px rgba(0,0,0,.5) !important; }
-    .card h3 { color:#bb86fc !important; margin:0 0 10px !important; border:0 !important; }
-    h1 { color:#bb86fc !important; }
-    #err { margin:12px 0; padding:12px; border-radius:10px; background:#4d1d28; color:#ffd6db; border:1px solid #cf6679; display:none; }
+    body {
+      background:#121212 !important;
+      color:#e0e0e0 !important;
+      font-family: system-ui, Segoe UI, Roboto, Arial, sans-serif;
+      margin:0;
+    }
+
+    .wrap {
+      max-width:1100px;
+      margin:0 auto;
+      padding:24px;
+    }
+
+    h1 {
+      color:#bb86fc !important;
+      margin:0 0 8px;
+      font-size:1.3rem;
+      font-weight:600;
+    }
+
+    .totales {
+      color:#aaa;
+      margin:0 0 16px;
+      font-size:.95rem;
+    }
+
+    #err {
+      margin:12px 0;
+      padding:12px;
+      border-radius:10px;
+      background:#4d1d28;
+      color:#ffd6db;
+      border:1px solid #cf6679;
+      display:none;
+      font-size:.9rem;
+    }
+
+    /* === GRID 2x2 DE GRÁFICOS === */
+    .graficos-grid {
+      display:grid;
+      grid-template-columns:repeat(auto-fit, minmax(360px, 1fr));
+      gap:24px;
+      align-items:start;
+      justify-items:center;
+    }
+
+    /* Tarjeta visual de cada gráfico */
+    .card {
+      background:#1e1e1e !important;
+      border:1px solid #333 !important;
+      border-radius:12px;
+      padding:16px;
+      box-shadow:0 8px 24px rgba(0,0,0,0.6) !important;
+      width:100%;
+      max-width:400px; /* 🔽 controla el ancho máximo de cada gráfico */
+    }
+
+    .card h3 {
+      color:#bb86fc !important;
+      margin:0 0 10px !important;
+      border:0 !important;
+      font-size:1rem;
+      font-weight:500;
+      text-align:center;
+    }
+
+    /* Ajuste de tamaño del canvas */
+    .card canvas {
+      width:100% !important;
+      height:400px !important; /* 🔺 más alto: 340px */
+      display:block;
+      background:#121212;
+      border-radius:8px;
+      padding:8px;
+  }
+
+/* Tarjetas más anchas y centradas */
+    .card {
+      max-width:400px;   /* 🔺 más ancho */
+    }
+
   </style>
 
+  <!-- libs -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- plugin de etiquetas -->
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
 </head>
 <body>
   <div class="wrap">
     <h1>📈 Estadísticas de fallas</h1>
-    <p>Total de casos: <b id="n_casos">—</b></p>
+    <p class="totales">Total de casos: <b id="n_casos">—</b></p>
+    <div class="acciones">
+      <a class="btn" href="/panel">🏠 Volver al panel principal</a>
+    </div>
+
 
     <div id="err"></div>
 
-    <div class="card"><h3>Top dispositivos</h3><canvas id="chartDevice"></canvas></div>
-    <div class="card"><h3>Top síntomas</h3><canvas id="chartSymptom"></canvas></div>
-    <div class="card"><h3>Categorías</h3><canvas id="chartCategory"></canvas></div>
-    <div class="card"><h3>Criticidad</h3><canvas id="chartCrit"></canvas></div>
+    <div class="graficos-grid">
+      <div class="card">
+        <h3>Top dispositivos</h3>
+        <canvas id="chartDevice"></canvas>
+      </div>
+
+      <div class="card">
+        <h3>Top síntomas</h3>
+        <canvas id="chartSymptom"></canvas>
+      </div>
+
+      <div class="card">
+        <h3>Categorías</h3>
+        <canvas id="chartCategory"></canvas>
+      </div>
+
+      <div class="card">
+        <h3>Criticidad</h3>
+        <canvas id="chartCrit"></canvas>
+      </div>
+    </div>
   </div>
 
-  <!-- Tema oscuro para Chart.js -->
+  <!-- Tema oscuro global para Chart.js -->
   <script>
+  // Config global Chart.js: solo lo seguro
   if (window.Chart) {
     Chart.defaults.color = '#e0e0e0';
     Chart.defaults.borderColor = 'rgba(255,255,255,0.15)';
@@ -43,98 +143,277 @@
     Chart.defaults.plugins.tooltip.titleColor = '#121212';
     Chart.defaults.plugins.tooltip.bodyColor = '#121212';
     Chart.defaults.plugins.tooltip.backgroundColor = '#e0e0e0';
-    Chart.defaults.scales.category.grid.color = 'rgba(255,255,255,0.12)';
-    Chart.defaults.scales.linear.grid.color = 'rgba(255,255,255,0.12)';
   }
-  </script>
 
- <script>
-async function loadStats(){
-  const showError = (msg) => {
-    const box = document.getElementById('err');
-    if (box) { box.textContent = msg || 'No se pudieron cargar las estadísticas.'; box.style.display = 'block'; }
-  };
+  // Registramos plugin de datalabels si está cargado
+  if (window.ChartDataLabels) {
+    Chart.register(ChartDataLabels);
+  } else {
+    console.error("DEBUG: ChartDataLabels no está disponible.");
+  }
 
-  try {
-    const res = await fetch("/api/stats", { headers: { "Accept": "application/json" } });
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    const data = await res.json();
+  async function loadStats(){
+    console.log("DEBUG: loadStats() INICIO");
 
-    const n = (data && typeof data.n_casos === "number") ? data.n_casos : Number(data?.n_casos || 0);
-    document.getElementById("n_casos").textContent = n;
+    const showError = (msg) => {
+      const box = document.getElementById('err');
+      if (box) {
+        box.textContent = msg || 'No se pudieron cargar las estadísticas.';
+        box.style.display = 'block';
+      }
+    };
 
-    const devL = Object.keys(data.by_device || {}),     devV = Object.values(data.by_device || {});
-    const symL = Object.keys(data.by_symptom || {}),    symV = Object.values(data.by_symptom || {});
-    const catL = Object.keys(data.by_category || {}),   catV = Object.values(data.by_category || {});
-    const criL = Object.keys(data.by_criticidad || {}), criV = Object.values(data.by_criticidad || {});
+    try {
+      console.log("DEBUG: solicitando /api/stats ...");
+      const res = await fetch("/api/stats", { headers: { "Accept": "application/json" } });
+      console.log("DEBUG: respuesta fetch", res.status);
 
-    // 🔸 Forzar a número (convierte "3" -> 3, null/undefined -> 0)
-    const toNums = (arr) => arr.map(v => (v == null ? 0 : Number(v)));
+      if (!res.ok) {
+        throw new Error(`HTTP ${res.status}`);
+      }
 
-    const bar = (id, L, V) => {
-      const el = document.getElementById(id);
-      if (!el) return;
-      if (!L.length) { el.parentElement.style.display = "none"; return; }
-      new Chart(el, {
-        type: "bar",
-        data: {
-          labels: L,
-          datasets: [{
-            label: "Cantidad",
-            data: toNums(V),
-            backgroundColor: "rgba(187, 134, 252, 0.55)",  // lila semitransparente
-            borderColor: "#bb86fc",
-            borderWidth: 1.5
-          }]
-        },
-        options: {
-          plugins:{ legend:{ display:false } },
-          responsive:true,
-          scales:{
-            y:{ beginAtZero:true, ticks:{ precision:0 } },
-            x:{ ticks:{ maxRotation: 45, minRotation: 0 } }
-          }
+      const data = await res.json();
+      console.log("DEBUG: data recibida", data);
+
+      if (!data || typeof data !== "object") {
+        throw new Error("Respuesta vacía o inválida de /api/stats");
+      }
+
+      // Total de casos
+      const n = (typeof data.n_casos === "number")
+        ? data.n_casos
+        : Number(data?.n_casos || 0);
+
+      const nNode = document.getElementById("n_casos");
+      if (nNode) nNode.textContent = n;
+      console.log("DEBUG: n_casos calculado:", n);
+
+      // Datos para gráficos
+      const devL = Object.keys(data.by_device || {});
+      const devV = Object.values(data.by_device || {});
+      const symL = Object.keys(data.by_symptom || {});
+      const symV = Object.values(data.by_symptom || {});
+      const catL = Object.keys(data.by_category || {});
+      const catV = Object.values(data.by_category || {});
+      const criL = Object.keys(data.by_criticidad || {});
+      const criV = Object.values(data.by_criticidad || {});
+
+      console.log("DEBUG: devL/devV", devL, devV);
+      console.log("DEBUG: criL/criV", criL, criV);
+
+      const toNums = (arr) => arr.map(v => (v == null ? 0 : Number(v)));
+
+      const pctFormatter = (value, ctx) => {
+        const arr = ctx.chart.data.datasets[0].data;
+        const total = arr.reduce((a,b)=>a+b,0);
+        if (!total) return "0%";
+        return ((value/total)*100).toFixed(1) + "%";
+      };
+
+      // ====== GRÁFICO: Top dispositivos (barras) ======
+      {
+        const el = document.getElementById("chartDevice");
+        if (el && devL.length) {
+          new Chart(el, {
+            type: "bar",
+            data: {
+              labels: devL,
+              datasets: [{
+                label: "Cantidad",
+                data: toNums(devV),
+                backgroundColor: "rgba(187,134,252,0.55)",
+                borderColor: "#bb86fc",
+                borderWidth: 1.5
+              }]
+            },
+            options: {
+              responsive:true,
+              maintainAspectRatio:false,
+              elements:{ bar:{ borderRadius:4 } },
+              plugins:{
+                legend:{ display:false },
+                datalabels:{
+                  display:true,
+                  color:'#fff',
+                  anchor:'end',
+                  align:'top',
+                  formatter:(value)=> value,
+                  font:{ weight:'bold', size:13 }
+                }
+              },
+              scales:{
+                y:{
+                  beginAtZero:true,
+                  ticks:{ precision:0, color:'#aaa' },
+                  grid:{ color:'#222' }
+                },
+                x:{
+                  ticks:{ maxRotation:45, minRotation:0, color:'#aaa' },
+                  grid:{ color:'#222' }
+                }
+              }
+            }
+          });
+        } else if (el) {
+          console.warn("DEBUG: chartDevice sin datos, ocultando card");
+          el.parentElement.style.display = "none";
         }
-      });
-    };
+      }
 
-    const pie = (id, L, V) => {
-      const el = document.getElementById(id);
-      if (!el) return;
-      if (!L.length) { el.parentElement.style.display = "none"; return; }
-      new Chart(el, {
-        type: "pie",
-        data: {
-          labels: L,
-          datasets: [{
-            data: toNums(V),
-            // paleta simple, visible en dark
-            backgroundColor: [
-              "rgba(187,134,252,0.75)",
-              "rgba(3,218,198,0.75)",
-              "rgba(255,112,67,0.75)",
-              "rgba(255,183,77,0.75)",
-              "rgba(129,212,250,0.75)"
-            ],
-            borderColor: "#1e1e1e",
-            borderWidth: 1
-          }]
-        },
-        options: { responsive:true }
-      });
-    };
+      // ====== GRÁFICO: Top síntomas (barras) ======
+      {
+        const el = document.getElementById("chartSymptom");
+        if (el && symL.length) {
+          new Chart(el, {
+            type: "bar",
+            data: {
+              labels: symL,
+              datasets: [{
+                label: "Cantidad",
+                data: toNums(symV),
+                backgroundColor: "rgba(3,218,198,0.4)",
+                borderColor: "rgba(3,218,198,1)",
+                borderWidth: 1.5
+              }]
+            },
+            options: {
+              responsive:true,
+              maintainAspectRatio:false,
+              elements:{ bar:{ borderRadius:4 } },
+              plugins:{
+                legend:{ display:false },
+                datalabels:{
+                  display:true,
+                  color:'#fff',
+                  anchor:'end',
+                  align:'top',
+                  formatter:(value)=> value,
+                  font:{ weight:'bold', size:13 }
+                }
+              },
+              scales:{
+                y:{
+                  beginAtZero:true,
+                  ticks:{ precision:0, color:'#aaa' },
+                  grid:{ color:'#222' }
+                },
+                x:{
+                  ticks:{ maxRotation:45, minRotation:0, color:'#aaa' },
+                  grid:{ color:'#222' }
+                }
+              }
+            }
+          });
+        } else if (el) {
+          console.warn("DEBUG: chartSymptom sin datos, ocultando card");
+          el.parentElement.style.display = "none";
+        }
+      }
 
-    bar("chartDevice", devL, devV);
-    bar("chartSymptom", symL, symV);
-    pie("chartCategory", catL, catV);
-    pie("chartCrit", criL, criV);
+      // ====== GRÁFICO: Categorías (pie) ======
+      {
+        const el = document.getElementById("chartCategory");
+        if (el && catL.length) {
+          new Chart(el, {
+            type: "pie",
+            data: {
+              labels: catL,
+              datasets: [{
+                data: toNums(catV),
+                backgroundColor: [
+                  "rgba(187,134,252,0.75)",
+                  "rgba(3,218,198,0.75)",
+                  "rgba(255,112,67,0.75)",
+                  "rgba(255,183,77,0.75)",
+                  "rgba(129,212,250,0.75)"
+                ],
+                borderColor: "#1e1e1e",
+                borderWidth: 1
+              }]
+            },
+            options: {
+              responsive:true,
+              maintainAspectRatio:false,
+              plugins:{
+                legend:{
+                  position:'bottom',
+                  labels:{ color:'#e0e0e0', padding:12, font:{size:12} }
+                },
+                datalabels:{
+                  display:true,
+                  color:'#fff',
+                  formatter:pctFormatter,
+                  font:{ weight:'bold', size:13 }
+                }
+              }
+            }
+          });
+          el.style.aspectRatio = "1 / 1";
+        } else if (el) {
+          console.warn("DEBUG: chartCategory sin datos, ocultando card");
+          el.parentElement.style.display = "none";
+        }
+      }
 
-  } catch (e) {
-    console.error(e);
-    showError("No se pudieron cargar los datos desde /api/stats.");
-    document.querySelectorAll('.card').forEach(c => c.style.display = 'none');
-    document.getElementById("n_casos").textContent = "0";
+      // ====== GRÁFICO: Criticidad (pie) ======
+      {
+        const el = document.getElementById("chartCrit");
+        if (el && criL.length) {
+          const colorMap = {
+            "critica": "rgba(244,67,54,0.8)",    // rojo
+            "alta":    "rgba(255,152,0,0.8)",    // naranja
+            "media":   "rgba(255,235,59,0.8)",   // amarillo
+            "baja":    "rgba(76,175,80,0.8)"     // verde
+          };
+          const colors = criL.map(
+            lvl => colorMap[lvl.toLowerCase()] || "rgba(187,134,252,0.7)"
+          );
+
+          new Chart(el, {
+            type: "pie",
+            data: {
+              labels: criL,
+              datasets: [{
+                data: toNums(criV),
+                backgroundColor: colors,
+                borderColor: "#1e1e1e",
+                borderWidth: 1
+              }]
+            },
+            options: {
+              responsive:true,
+              maintainAspectRatio:false,
+              plugins:{
+                legend:{
+                  position:'bottom',
+                  labels:{ color:'#e0e0e0', padding:12, font:{size:12} }
+                },
+                datalabels:{
+                  display:true,
+                  color:'#fff',
+                  formatter:pctFormatter,
+                  font:{ weight:'bold', size:13 }
+                }
+              }
+            }
+          });
+          el.style.aspectRatio = "1 / 1";
+        } else if (el) {
+          console.warn("DEBUG: chartCrit sin datos, ocultando card");
+          el.parentElement.style.display = "none";
+        }
+      }
+
+      console.log("DEBUG: loadStats() FIN OK");
+    } catch (e) {
+      console.error("Error en loadStats():", e);
+      showError("No se pudieron cargar los datos desde /api/stats.");
+      document.querySelectorAll('.card').forEach(c => c.style.display = 'none');
+      const nNode = document.getElementById("n_casos");
+      if (nNode) nNode.textContent = "0";
+    }
   }
-}
-loadStats();
+
+  console.log("DEBUG: iniciando loadStats()");
+  loadStats();
 </script>

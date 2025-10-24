@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Sistema de detección de fallos</title>
+  <title>Gestión de Diagnósticos IoT</title>
 
   <!-- Vincula el CSS global -->
   <link href="{{ url_for('static', path='style.css') }}" rel="stylesheet" />
@@ -91,32 +91,31 @@
 
 <body>
   <div class="wrap">
-    <h1>Panel Principal</h1>
-    <p class="sub">Elegí una acción para continuar.</p>
-
-        <div class="card" style="position:relative;">
-            <h3>🩺 Agregar diagnóstico</h3>
-            <p>Cargá un nuevo caso para obtener un diagnóstico del sistema experto.</p>
-
-            <!-- Botón real, SIN <button> alrededor -->
-            <a href="/form" class="btn btn-prim" style="display:inline-block; margin-top:12px;">
-                Ir al formulario
-            </a>
-        </div>
+    <h1>Gestión de Diagnósticos IoT</h1>
+    <hr>
+    <p class="subtexto-panel">Elegí una acción para continuar.</p>
 
 
-      <div class="card">
-        <h3>📊 Ver estadísticas</h3>
-        <p>Gráficos con dispositivos, síntomas, categorías y criticidad.</p>
-        <a href="/stats">Abrir estadísticas</a>
-      </div>
+        <div class="opciones">
+  <div class="card">
+    <h2>🩺 Agregar diagnóstico</h2>
+    <p>Cargá un nuevo caso para obtener un diagnóstico del sistema experto.</p>
+    <a class="btn btn-prim" href="/nuevo">Ir al formulario</a>
+  </div>
 
-      <div class="card">
-        <h3>📋 Tabla de diagnósticos</h3>
-        <p>Resumen detallado de cada caso procesado, con filtros simples.</p>
-        <a href="/casos/diagnosticados">Ver tabla</a>
-      </div>
-    </div>
+  <div class="card">
+    <h2>📊 Ver estadísticas</h2>
+    <p>Gráficos con dispositivos, síntomas, categorías y criticidad.</p>
+    <a class="btn btn-prim" href="/stats">Abrir estadísticas</a>
+  </div>
+
+  <div class="card">
+    <h2>📋 Tabla de diagnósticos</h2>
+    <p>Resumen detallado de cada caso procesado, con filtros simples.</p>
+    <a class="btn btn-prim" href="/casos/diagnosticados">Ver tabla</a>
+  </div>
+</div>
+
   </div>
 </body>
 </html>

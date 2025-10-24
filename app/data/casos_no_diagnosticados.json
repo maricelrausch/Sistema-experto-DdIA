@@ -99,5 +99,15 @@
     ],
     "categoria_top": "red",
     "criticidad": "baja"
+  },
+  {
+    "nombre": "sobrecalentamiento",
+    "fecha": "2025-10-24 19:00",
+    "tipo_dispositivo": "termostato",
+    "sintomas": [
+      "falla_autenticacion"
+    ],
+    "categoria_top": "configuracion",
+    "criticidad": "media"
   }
 ]

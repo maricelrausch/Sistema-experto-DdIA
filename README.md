@@ -55,62 +55,62 @@ proyecto-sistema-experto-main/
 
 ```
 
-# ⚙️ Instalación y Ejecución
+## ⚙️ Instalación y Ejecución
 
 Requisitos previos:
 Tener instalado Python 3.11+ y Git.
 
-# 🚀 Instrucciones de instalación y ejecución
+## 🚀 Instrucciones de instalación y ejecución
 
 ### 1. Clonar el repositorio
 
-git clone https://github.com/maricelrausch/Sistema-experto-DdIA.git
-cd Sistema-experto-DdIA
+    git clone https://github.com/maricelrausch/Sistema-experto-DdIA.git
+    cd Sistema-experto-DdIA
 
 ### 2. Crear y activar el entorno virtual
-bash
-python -m venv venv
+    bash
+    python -m venv venv
 
 En Windows (PowerShell / CMD):
-bash
-venv\Scripts\activate
+    bash
+    venv\Scripts\activate
 
 En Linux / macOS:
-bash
-source venv/bin/activate
+    bash
+    source venv/bin/activate
 
 
 ### 3. Instalar dependencias
-bash
-pip install -r requirements.txt
+    bash
+    pip install -r requirements.txt
 
 ### 4. Ejecutar la aplicación FastAPI
-bash
-uvicorn app.main:app --reload
+    bash
+    uvicorn app.main:app --reload
 
 ### 5. Luego abrí en tu navegador:
 
-App: http://127.0.0.1:8000/panel
+    App: http://127.0.0.1:8000/panel
 
-# Requerimientos Técnicos
+## Requerimientos Técnicos
 
-Herramienta	Versión recomendada
-Python	3.11+
-FastAPI	0.110+
-Uvicorn	0.30+
-Pydantic	2.x
-Jinja2	3.1+
-Chart.js	4.x (gráficos en /stats)
+    Herramienta	Versión recomendada
+    Python	3.11+
+    FastAPI	0.110+
+    Uvicorn	0.30+
+    Pydantic	2.x
+    Jinja2	3.1+
+    Chart.js	4.x (gráficos en /stats)
 
 Las dependencias exactas están en requirements.txt.
 
-# Autores
+## Autores
 
-Maricel Rausch – Integración FastAPI, frontend, documentación.
-Eduardo Saldivia – Motor de inferencia, base de conocimiento.
-Facundo Isa – Interfaz, visualización, testing funcional.
+    Maricel Rausch – Integración FastAPI, frontend, documentación.
+    Eduardo Saldivia – Motor de inferencia, base de conocimiento.
+    Facundo Isa – Interfaz, visualización, testing funcional.
 
-# Licencia y Uso
+## Licencia y Uso
 Proyecto académico con fines educativos.
 Se permite reutilizar el código con fines de aprendizaje, mencionando a los autores.
 

@@ -109,5 +109,48 @@
     ],
     "categoria_top": "configuracion",
     "criticidad": "media"
+  },
+  {
+    "nombre": "Luz de emergencia",
+    "fecha": "2025-10-25 11:29",
+    "tipo_dispositivo": "luz_inteligente",
+    "sintomas": [
+      "reinicios_frecuentes",
+      "latencia_alta",
+      "falla_autenticacion"
+    ],
+    "categoria_top": "configuracion",
+    "criticidad": "media"
+  },
+  {
+    "nombre": "Puerta cocina",
+    "fecha": "2025-10-25 11:46",
+    "tipo_dispositivo": "cerradura_inteligente",
+    "sintomas": [
+      "falla_autenticacion"
+    ],
+    "categoria_top": "configuracion",
+    "criticidad": "critica"
+  },
+  {
+    "nombre": "Calefaccion cocina",
+    "fecha": "2025-10-25 11:52",
+    "tipo_dispositivo": "termostato",
+    "sintomas": [
+      "consumo_anomalo"
+    ],
+    "categoria_top": "hardware",
+    "criticidad": "alta"
+  },
+  {
+    "nombre": "sobrecarga",
+    "fecha": "2025-10-25 11:52",
+    "tipo_dispositivo": "sensor_agua",
+    "sintomas": [
+      "error_conexion",
+      "latencia_alta"
+    ],
+    "categoria_top": "red",
+    "criticidad": "critica"
   }
 ]

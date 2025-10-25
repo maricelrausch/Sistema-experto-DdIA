@@ -37,7 +37,7 @@ Además incluye una **interfaz web completa** para:
 
 ## Arquitectura del Proyecto
 
-```text
+
 proyecto-sistema-experto-main/
 │
 ├─ app/

@@ -1,125 +1,154 @@
-<!-- 
+<!--
 ========================================================
-README - Sistema Experto IoT
-Proyecto final - Desarrollo de Sistemas de Inteligencia Artificial (2025)
+Sistema Experto IoT
+Proyecto final - Desarrollo de Sistemas de IA (2025)
 Autores: Maricel Rausch, Eduardo Saldivia, Facundo Isa
 Institución: Politécnico Malvinas Argentinas
 ========================================================
 -->
 
-# 🧠 Sistema Experto para Diagnóstico de Dispositivos IoT  
-**Proyecto Final – Desarrollo de Sistemas de Inteligencia Artificial (2025)**  
+# Sistema Experto para Diagnóstico de Dispositivos IoT  
+Proyecto Final – Desarrollo de Sistemas de Inteligencia Artificial (2025)
 
-📚 *Carrera:* Ciencias de Datos e Inteligencia Artificial  
-🏫 *Institución:* Politécnico Malvinas Argentinas  
-👩‍💻 *Autores:* **Maricel Rausch**, **Eduardo Saldivia**, **Facundo Isa**  
-
----
-
-## 🚀 Descripción General
-
-Este proyecto implementa un **Sistema Experto** en **FastAPI** para el diagnóstico inteligente de fallas en dispositivos **IoT (Internet of Things)**.  
-El sistema aplica una **base de conocimiento configurable (JSON)** y un **motor de inferencia** que evalúa síntomas, calcula probabilidades y determina la criticidad del problema, ofreciendo una **recomendación automática** al usuario.
-
-Además, cuenta con una **interfaz web completa** para:
-- Registrar casos y ver resultados en tiempo real.
-- Consultar estadísticas de diagnósticos.
-- Editar la base de conocimiento sin tocar código.
+**Carrera:** Ciencias de Datos e Inteligencia Artificial  
+**Institución:** Politécnico Malvinas Argentinas  
+**Autores:** Maricel Rausch, Eduardo Saldivia, Facundo Isa  
 
 ---
 
-## 🧩 Arquitectura del Proyecto
+## Descripción General
 
+Este proyecto implementa un **Sistema Experto** en **FastAPI** para el diagnóstico inteligente de fallas en dispositivos IoT (Internet of Things).
+
+El sistema:
+- Recibe síntomas observados en un dispositivo.
+- Consulta una base de conocimiento configurable almacenada en JSON.
+- Calcula probabilidad de posibles causas.
+- Determina el nivel de criticidad del problema.
+- Genera una recomendación automática para el usuario.
+
+Además incluye una **interfaz web completa** para:
+- Cargar un nuevo caso y ver el resultado.
+- Consultar el historial de diagnósticos.
+- Visualizar métricas y gráficos.
+- Administrar la base de conocimiento sin editar el código.
+
+---
+
+## Arquitectura del Proyecto
+
+```text
 proyecto-sistema-experto-main/
 │
 ├─ app/
-│ ├─ main.py # API principal y rutas FastAPI
-│ ├─ modelos.py # Modelos de datos (Pydantic + Enums)
-│ ├─ reglas.py # Motor de inferencia (BaseConocimiento)
-│ ├─ static/ # Archivos CSS y recursos estáticos
-│ ├─ templates/ # Interfaz web (HTML + Jinja2)
-│ └─ data/ # Archivos JSON (Base de conocimiento + Casos)
+│  ├─ main.py                # API principal y rutas FastAPI
+│  ├─ modelos.py             # Modelos de datos (Pydantic + Enums)
+│  ├─ reglas.py              # Motor de inferencia (BaseConocimiento)
+│  ├─ static/                # Archivos CSS / assets
+│  ├─ templates/             # Interfaz web (HTML + Jinja2)
+│  └─ data/
+│      ├─ base_conocimiento.json        # Reglas del sistema experto
+│      └─ casos_no_diagnosticados.json  # Historial de diagnósticos
 │
-├─ requirements.txt # Dependencias del entorno
-├─ README.md # Documentación del proyecto
-└─ venv/ # Entorno virtual (local)
+├─ requirements.txt          # Dependencias del entorno
+└─ README.md                 # Documentación del proyecto
+Instalación y Ejecución
+Requisitos previos:
 
-yaml
+Python 3.11 o superior
+
+Git
+
+1. Clonar el repositorio
+bash
 Copiar código
-
----
-
-## ⚙️ Instalación y Ejecución
-
-> **💡 Requisitos previos:**  
-> Tener instalado **Python 3.11+** y **Git**.  
-
-### 1️⃣ Clonar el repositorio
-```bash
-git clone https://github.com/<usuario>/proyecto-sistema-experto-main.git
-cd proyecto-sistema-experto-main
-2️⃣ Crear y activar entorno virtual
+git clone https://github.com/maricelrausch/Sistema-experto-DdIA.git
+cd Sistema-experto-DdIA
+2. Crear y activar el entorno virtual
 bash
 Copiar código
 python -m venv venv
-En Windows:
+En Windows (PowerShell / CMD):
 
 bash
 Copiar código
 venv\Scripts\activate
-En Linux/Mac:
+En Linux / macOS:
 
 bash
 Copiar código
 source venv/bin/activate
-3️⃣ Instalar dependencias
+3. Instalar dependencias
 bash
 Copiar código
 pip install -r requirements.txt
-4️⃣ Ejecutar la aplicación
+4. Ejecutar la aplicación FastAPI
 bash
 Copiar código
 uvicorn app.main:app --reload
-🔗 Por defecto, la aplicación estará disponible en:
-http://127.0.0.1:8000
+Luego abrí en tu navegador:
 
-🖥️ Interfaz Web (Rutas Principales)
+App: http://127.0.0.1:8000/panel
+
+Docs interactivas (Swagger): http://127.0.0.1:8000/docs
+
+Interfaz Web (rutas principales)
 Ruta	Descripción
-/panel	Panel principal con accesos a todas las secciones.
-/nuevo	Formulario para cargar un nuevo diagnóstico.
-/resultado	Página que muestra el resultado del diagnóstico.
-/casos/diagnosticados	Historial de casos registrados.
-/stats	Visualización de estadísticas y gráficos (Chart.js).
-/admin/kb	Editor de base de conocimiento (agregar/editar síntomas y dispositivos).
+/panel	Panel principal con accesos rápidos.
+/nuevo	Formulario para ingresar un dispositivo y sus síntomas.
+/resultado	Vista con el diagnóstico generado.
+/casos/diagnosticados	Historial de diagnósticos registrados.
+/stats	Gráficos y métricas de uso del sistema.
+/admin/kb	Editor de la base de conocimiento (síntomas, causas, factores por equipo).
 
-🧠 Motor de Inferencia (app/reglas.py)
-El motor BaseConocimiento:
+Motor de Inferencia (app/reglas.py)
+El motor BaseConocimiento es el corazón del sistema experto.
+
+Responsabilidades:
 
 Carga las reglas desde app/data/base_conocimiento.json.
 
-Evalúa los síntomas reportados y busca causas posibles.
+Busca qué causas se asocian a los síntomas reportados.
 
-Ajusta probabilidades según:
+Ajusta la probabilidad de cada causa según:
 
 Tipo de dispositivo.
 
-Factores definidos (factor_hardware, factor_red, etc.).
+Factores definidos para ese tipo (factor_hardware, factor_red, etc.).
 
-Señal WiFi, firmware y tiempo encendido.
+Intensidad de la señal WiFi.
 
-Determina el nivel de criticidad (BAJA, MEDIA, ALTA, CRITICA).
+Estado del firmware.
 
-Devuelve un listado de causas probables con su recomendación.
+Tiempo encendido del dispositivo.
 
-Ejemplo de flujo:
-text
-Copiar código
-1️⃣ Usuario ingresa: "Cámara de seguridad" + "No responde" + "Error de conexión".
-2️⃣ El sistema consulta las reglas relacionadas en la base de conocimiento.
-3️⃣ Ajusta las probabilidades considerando factores y contexto.
-4️⃣ Devuelve diagnóstico + recomendación.
-📂 Base de Conocimiento (JSON)
-Ubicación: app/data/base_conocimiento.json
+Determina el nivel de criticidad (baja, media, alta, critica).
+
+Ejemplo de flujo conceptual:
+
+El usuario reporta:
+
+Dispositivo: "cámara de seguridad"
+
+Síntomas: "no responde", "error de conexión"
+
+El sistema consulta reglas asociadas a cada síntoma.
+
+Ajusta probabilidades según contexto (por ejemplo, mala WiFi aumenta problemas de red).
+
+Devuelve:
+
+causas más probables,
+
+recomendación prioritaria,
+
+criticidad total.
+
+Base de Conocimiento
+La base de conocimiento vive en:
+app/data/base_conocimiento.json
+
+Ejemplo (resumido):
 
 json
 Copiar código
@@ -130,10 +159,11 @@ Copiar código
         "causa": "Falla total de firmware",
         "categoria": "hardware",
         "probabilidad_base": 85,
-        "solucion": "Reinstalar firmware original"
+        "solucion": "Reinstalar firmware oficial"
       }
     ]
   },
+
   "reglas_por_dispositivo": {
     "termostato": {
       "factor_hardware": 1.3,
@@ -144,11 +174,23 @@ Copiar código
     }
   }
 }
-El archivo puede editarse manualmente o desde la interfaz /admin/kb.
+Notas:
 
-🧮 Casos y Estadísticas
-Los diagnósticos realizados se guardan automáticamente en
-app/data/casos_no_diagnosticados.json, con estructura tipo:
+reglas_por_sintoma define, por cada síntoma, cuáles son las posibles causas y cómo diagnosticarlas.
+
+reglas_por_dispositivo define modificadores de probabilidad y qué síntomas son críticos para ese tipo de equipo.
+
+Esta información se puede editar:
+
+A mano (editando el JSON).
+
+Desde la interfaz /admin/kb (sin tocar el código).
+
+Casos y Estadísticas
+Cada vez que se hace un diagnóstico, se guarda un registro en:
+app/data/casos_no_diagnosticados.json
+
+Ejemplo:
 
 json
 Copiar código
@@ -162,65 +204,47 @@ Copiar código
     "criticidad": "alta"
   }
 ]
-La sección /stats analiza este archivo y genera gráficos automáticos con Chart.js:
+Ese archivo alimenta:
 
-Distribución de casos por tipo de dispositivo.
+La tabla en /casos/diagnosticados
 
-Frecuencia de síntomas.
+Los gráficos en /stats (por ejemplo distribución por tipo, síntomas más frecuentes, niveles de criticidad, etc.)
 
-Categorías más comunes.
-
-Niveles de criticidad.
-
-🔬 Prueba Rápida (Smoke Test)
-Para probar el motor sin levantar la API:
+Prueba rápida del motor (sin levantar la API)
+Podés probar el motor de reglas directamente desde consola:
 
 bash
 Copiar código
 python -m app.reglas
-Esto carga la base de conocimiento, crea un dispositivo de prueba y muestra:
+Esto:
 
-css
-Copiar código
-🔎 Diagnósticos (top 5):
- - Falla total de firmware | hardware | 82.0%
-📶 Criticidad: alta
-🧰 Requerimientos Técnicos
+Crea un dispositivo de ejemplo.
+
+Corre la inferencia.
+
+Muestra por consola las causas más probables y la criticidad estimada.
+
+Sirve para testear que la base de conocimiento JSON está bien formada.
+
+Requerimientos Técnicos
 Herramienta	Versión recomendada
 Python	3.11+
 FastAPI	0.110+
 Uvicorn	0.30+
-Jinja2	3.1+
 Pydantic	2.x
-Chart.js	4.x (para los gráficos en /stats)
+Jinja2	3.1+
+Chart.js	4.x (gráficos en /stats)
 
-👩‍💻 Autores
-Nombre	Rol	Contacto
-Maricel Rausch	Desarrollo Frontend, integración FastAPI, documentación	
-Eduardo Saldivia	Motor de inferencia, base de conocimiento	
-Facundo Isa	Diseño de interfaz, visualización y testing	
+Las dependencias exactas están en requirements.txt.
 
-🧭 Conclusión
-Este sistema experto demuestra cómo combinar lógica simbólica (reglas) con una API moderna (FastAPI) para resolver problemas reales de diagnóstico.
-Su arquitectura modular permite escalar fácilmente a otros contextos:
+Autores
+Maricel Rausch – Integración FastAPI, frontend, documentación.
 
-mantenimiento predictivo,
+Eduardo Saldivia – Motor de inferencia, base de conocimiento.
 
-monitoreo remoto,
+Facundo Isa – Interfaz, visualización, testing funcional.
 
-o integración con sensores IoT reales.
+Licencia y Uso
+Proyecto académico con fines educativos.
+Se permite reutilizar el código con fines de aprendizaje, mencionando a los autores.
 
-🌟 Ejecución Rápida (resumen)
-bash
-Copiar código
-git clone https://github.com/<usuario>/proyecto-sistema-experto-main.git
-cd proyecto-sistema-experto-main
-python -m venv venv
-venv\Scripts\activate        # o source venv/bin/activate
-pip install -r requirements.txt
-uvicorn app.main:app --reload
-📍Abrir en navegador: http://127.0.0.1:8000/panel
-
-🏁 Licencia y Uso
-Proyecto académico – uso educativo y demostrativo.
-Puedes reutilizarlo con fines formativos, citando a sus autores originales.

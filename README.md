@@ -10,13 +10,13 @@ Institución: Politécnico Malvinas Argentinas
 # Sistema Experto para Diagnóstico de Dispositivos IoT  
 Proyecto Final – Desarrollo de Sistemas de Inteligencia Artificial (2025)
 
-**Carrera:** Ciencias de Datos e Inteligencia Artificial  
-**Institución:** Politécnico Malvinas Argentinas  
-**Autores:** Maricel Rausch, Eduardo Saldivia, Facundo Isa  
+📚 *Carrera:* Ciencias de Datos e Inteligencia Artificial  
+🏫 *Institución:* Politécnico Malvinas Argentinas  
+👩‍💻 *Autores:* **Maricel Rausch**, **Eduardo Saldivia**, **Facundo Isa**
 
 ---
 
-## Descripción General
+## 🚀 Descripción General
 
 Este proyecto implementa un **Sistema Experto** en **FastAPI** para el diagnóstico inteligente de fallas en dispositivos IoT (Internet of Things).
 
@@ -35,7 +35,7 @@ Además incluye una **interfaz web completa** para:
 
 ---
 
-## Arquitectura del Proyecto
+## 🧩Arquitectura del Proyecto
 
 ```text
 proyecto-sistema-experto-main/
@@ -92,7 +92,17 @@ En Linux / macOS:
 
     App: http://127.0.0.1:8000/panel
 
-## Requerimientos Técnicos
+## 🌟 Ejecución Rápida (resumen)
+```text
+git clone https://github.com/<usuario>/proyecto-sistema-experto-main.git
+cd proyecto-sistema-experto-main
+python -m venv venv
+venv\Scripts\activate        # o source venv/bin/activate
+pip install -r requirements.txt
+uvicorn app.main:app --reload
+```
+
+## 🧰Requerimientos Técnicos
 
     Herramienta	Versión recomendada
     Python	3.11+
@@ -104,13 +114,23 @@ En Linux / macOS:
 
 Las dependencias exactas están en requirements.txt.
 
-## Autores
+## 🧭 Conclusión
+
+Este sistema experto demuestra cómo combinar lógica simbólica (reglas) con una API moderna (FastAPI) para resolver problemas reales de diagnóstico.
+Su arquitectura modular permite escalar fácilmente a otros contextos:
+- mantenimiento predictivo,
+
+- monitoreo remoto,
+
+- o integración con sensores IoT reales.
+
+## 👩‍💻 Autores
 
     Maricel Rausch – Integración FastAPI, frontend, documentación.
     Eduardo Saldivia – Motor de inferencia, base de conocimiento.
     Facundo Isa – Interfaz, visualización, testing funcional.
 
-## Licencia y Uso
-Proyecto académico con fines educativos.
-Se permite reutilizar el código con fines de aprendizaje, mencionando a los autores.
+## 🏁Licencia y Uso
+- Proyecto académico con fines educativos.
+- Se permite reutilizar el código con fines de aprendizaje, mencionando a los autores.
 

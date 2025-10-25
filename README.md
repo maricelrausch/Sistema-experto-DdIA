@@ -37,7 +37,7 @@ Además incluye una **interfaz web completa** para:
 
 ## Arquitectura del Proyecto
 
-
+```text
 proyecto-sistema-experto-main/
 │
 ├─ app/
@@ -61,7 +61,7 @@ Python 3.11 o superior
 
 ### 1. Clonar el repositorio
 
-```bash
+
 git clone https://github.com/maricelrausch/Sistema-experto-DdIA.git
 cd Sistema-experto-DdIA
 
